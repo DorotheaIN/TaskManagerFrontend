@@ -10,7 +10,7 @@
           inactive-color="#ff4949">
         </el-switch>
 <!--        <i style="padding-right: 20px" class="el-icon-delete" ></i>-->
-        <i class="el-icon-delete" ></i>
+        <i class="el-icon-delete" @click="deletSet"></i>
       </div>
     </div>
     <div class="task-tools">
@@ -89,6 +89,13 @@ export default {
     }
   },
   methods: {
+    deletSet(){
+      const data = {
+        param: 'id=' + this.set.id,
+        actual: this.set.id
+      }
+      this.$store.dispatch('task/deleteCurSet', data)
+    },
     addNewTask(key) {
       this.input = ''
       const task = {

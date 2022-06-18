@@ -2,30 +2,31 @@
   <div style="padding:30px;">
     <el-row :gutter="20">
       <el-col :span="12" :offset="6">
-        <el-input v-model="taskSetTitle" placeholder="Search keyword" style="margin-bottom:30px;" >
-          <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input v-model="taskSetTitle" placeholder="Search keyword" style="margin-bottom:30px;">
+          <el-button slot="append" icon="el-icon-search" />
         </el-input>
       </el-col>
       <el-col :span="3" :offset="3">
         <el-button round @click="dialogVisible = true">添加任务集</el-button>
       </el-col>
     </el-row>
-<!--    <el-row v-for="(row,index) in sliceList(taskSetList,2)" :key="index">-->
+    <!--    <el-row v-for="(row,index) in sliceList(taskSetList,2)" :key="index">-->
     <el-row v-for="(row,index) in sliceList($store.getters.setList,2)" :key="index">
       <br>
       <br>
       <el-col v-for="(item,i) in row" :key="i" span="12">
-        <todo-card :set="item"></todo-card>
+        <todo-card :set="item" />
       </el-col>
       <br>
       <br>
     </el-row>
     <el-dialog
       title="New TaskSet Info"
-      :visible.sync="dialogVisible">
+      :visible.sync="dialogVisible"
+    >
       <el-form :model="taskSet">
         <el-form-item label="Title" :label-width="formLabelWidth">
-          <el-input v-model="taskSet.name" autocomplete="off"></el-input>
+          <el-input v-model="taskSet.name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="State" :label-width="formLabelWidth">
           <el-radio v-model="taskSet.released" :label="false">private</el-radio>
@@ -34,51 +35,52 @@
         <el-form-item label="Deadline" :label-width="formLabelWidth">
           <el-date-picker
             v-model="taskSet.deadline"
+            value-format="yyyy-MM-dd HH:mm:ss"
             type="datetime"
             placeholder="选择日期时间"
-            default-time="23:59:59">
-          </el-date-picker>
+            default-time="23:59:59"
+          />
         </el-form-item>
         <el-form-item label="Tag" :label-width="formLabelWidth">
           <el-tag
-            :key="tag"
             v-for="tag in taskSet.genres"
+            :key="tag"
             closable
             :disable-transitions="false"
-            @close="handleClose(tag)">
-            {{tag}}
+            @close="handleClose(tag)"
+          >
+            {{ tag }}
           </el-tag>
           <el-input
-            class="input-new-tag"
             v-if="inputVisible"
-            v-model="inputValue"
             ref="saveTagInput"
+            v-model="inputValue"
+            class="input-new-tag"
             size="small"
             @keyup.enter.native="handleInputConfirm"
             @blur="handleInputConfirm"
-          >
-          </el-input>
+          />
           <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
 
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addSet">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
-
 <script>
 import { mapGetters } from 'vuex'
 import TodoCard from '@/components/TodoCard'
 import { getSetsByCreater } from '@/api/task'
-
+import { v4 as uuidv4 } from 'uuid'
+import moment from 'moment'
 export default {
   name: 'Dashboard',
-  components:{
+  components: {
     TodoCard
   },
   data() {
@@ -124,14 +126,14 @@ export default {
       'name'
     ]),
     sliceList() {
-      return function (data,count) {
+      return function(data, count) {
         if (data != undefined) {
-          let index = 0;
-          let arrTemp = [];
+          let index = 0
+          const arrTemp = []
           for (let i = 0; i < data.length; i++) {
-            index = parseInt(i / count);
+            index = parseInt(i / count)
             if (arrTemp.length <= index) {
-              arrTemp.push([]);
+              arrTemp.push([])
             }
             arrTemp[index].push(data[i])
           }
@@ -144,62 +146,47 @@ export default {
     this.fetchData()
   },
   methods: {
+    addSet() {
+      this.dialogVisible = false
+      const set = {
+        id: uuidv4(),
+        name: this.taskSet.name,
+        released: this.taskSet.released,
+        deadline: this.taskSet.deadline,
+        genres: this.taskSet.genres,
+        todos: []
+      }
+      const url = 'id=' + set.id + '&name=' + set.name +
+        '&createtime=' + moment(new Date()).format('YYYY-MM-DD HH:mm:ss') +
+        '&tag=' + set.genres.join(';') + '&ddl=' + set.deadline + '&creatermail=' +
+        '1@qq.com' + '&state=' + (set.released ? 1 : 0)
+
+      const data = {
+        param: url,
+        actual: set
+      }
+      console.log(data)
+      this.$store.dispatch('task/addNewSet', data)
+    },
     handleClose(tag) {
-      this.taskSet.genres.splice(this.taskSet.genres.indexOf(tag), 1);
+      this.taskSet.genres.splice(this.taskSet.genres.indexOf(tag), 1)
     },
     fetchData() {
       this.$store.dispatch('task/getSetListByUser', '1@qq.com')
-      // getSetsByCreater({'creatermail':'1@qq.com'}).then((response) => {
-      //   console.log("get",response)
-      //   // this.taskSetList = response
-      //   this.taskSetList = []
-      //   response.forEach((item) => {
-      //     console.log(item)
-      //     let todoArr = []
-      //     item.todos.forEach((todo) => {
-      //       todoArr.push(
-      //         {
-      //           id: todo.id,
-      //           title: todo.name,
-      //           completed: (todo.state == 0) ? false : true,
-      //           ddl: this.standardTime(todo.deadline),
-      //           owner: item.name
-      //         }
-      //       )
-      //     })
-      //     this.taskSetList.push({
-      //       id:item.id,
-      //       name:item.name,
-      //       released: (item.state == 0) ? false : true,
-      //       deadline: item.deadline,
-      //       genres: item.tag.split(';').filter((t) => {
-      //         return t != ""
-      //       }),
-      //       todos:todoArr
-      //     })
-      //   })
-      //   console.log(this.taskSetList)
-      // })
-    },
-    standardTime(time) {
-      console.log("raw", time)
-      console.log("then", time.replace('T', ' '))
-      return time.replace('T', ' ')
     },
     showInput() {
-      this.inputVisible = true;
+      this.inputVisible = true
       this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
     },
-
     handleInputConfirm() {
-      let inputValue = this.inputValue;
+      const inputValue = this.inputValue
       if (inputValue) {
-        this.taskSet.genres.push(inputValue);
+        this.taskSet.genres.push(inputValue)
       }
-      this.inputVisible = false;
-      this.inputValue = '';
+      this.inputVisible = false
+      this.inputValue = ''
     }
   }
 }
