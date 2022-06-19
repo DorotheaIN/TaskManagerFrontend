@@ -8,6 +8,14 @@ export function login(data) {
   })
 }
 
+// export function login(params, data) {
+//   return request({
+//     url: '/taskManager/Login' + '?' + params,
+//     method: 'post',
+//     data
+//   })
+// }
+
 export function getInfo(token) {
   return request({
     url: '/vue-admin-template/user/info',

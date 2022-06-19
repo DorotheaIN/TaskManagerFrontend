@@ -24,6 +24,7 @@
 import { mapGetters } from 'vuex'
 import TodoCard from '@/components/TodoCard'
 import PublicSet from '@/components/PublicSet'
+import { getAllPublicSets } from '@/api/task'
 
 export default {
   name: 'Find',
@@ -91,6 +92,40 @@ export default {
     }
   },
   methods: {
+    fetchData() {
+      getAllPublicSets().then((response) => {
+        const list = []
+        console.log('get', response)
+        response.forEach((item) => {
+          const todoArr = []
+          item.todos.forEach((todo) => {
+            todoArr.push(
+              {
+                id: todo.id,
+                title: todo.name,
+                completed: todo.state !== 0,
+                ddl: todo.deadline.replace('T', ' '),
+                owner: item.id,
+                finishtime: todo.finishtime
+              }
+            )
+          })
+          list.push({
+            id: item.id,
+            name: item.name,
+            released: item.state !== 0,
+            deadline: item.deadline.replace('T', ' '),
+            genres: item.tag.split(';').filter((t) => {
+              return t !== ''
+            }),
+            todos: todoArr
+          })
+        })
+        console.log(list)
+        this.taskSetList = list
+      })
+    },
+
     handleClose(tag) {
       this.taskSet.genres.splice(this.taskSet.genres.indexOf(tag), 1);
     },
@@ -110,6 +145,9 @@ export default {
       this.inputVisible = false;
       this.inputValue = '';
     }
+  },
+  created() {
+    this.fetchData()
   }
 }
 </script>

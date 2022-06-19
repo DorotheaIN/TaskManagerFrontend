@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function getAllSets(params) {
+export function getAllPublicSets(params) {
   return request({
-    url: '/taskManager/GetAllSet',
+    url: '/taskManager/GetAllPublicSet',
     method: 'get',
     params
   })
@@ -47,4 +47,28 @@ export function addSet(params, data) {
     method: 'post',
     data
   }))
+}
+
+export function updateTodo(params, data) {
+  return request(({
+    url: '/taskManager/UpdateTodo' + '?' + params,
+    method: 'post',
+    data
+  }))
+}
+
+export function updateSet(params, data) {
+  return request(({
+    url: '/taskManager/UpdateSet' + '?' + params,
+    method: 'post',
+    data
+  }))
+}
+
+export function login(params, data) {
+  return request({
+    url: '/taskManager/Login' + '?' + params,
+    method: 'post',
+    data
+  })
 }

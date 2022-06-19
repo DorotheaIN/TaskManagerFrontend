@@ -5,7 +5,8 @@
       <div class="task-header-icon">
         <el-switch
           style="padding-right: 20px; padding-bottom: 3px"
-          v-model="set.released"
+          v-model="released"
+          @click.native="updateReleased"
           active-color="#13ce66"
           inactive-color="#ff4949">
         </el-switch>
@@ -37,7 +38,7 @@
     </form>
     <div v-for="task in set.todos" class="task-list">
       <div :class="task.completed ? 'task-item is-completed' : 'task-item' ">
-        <input class="task-status" type="checkbox" v-model="task.completed" data-id="-3">
+        <input class="task-status" type="checkbox" v-model="task.completed" data-id="-3" @click="updateCompleted(task)">
         <label class="task-name">
           {{task.title}}
 <!--          <el-divider direction="vertical"></el-divider>-->
@@ -52,6 +53,7 @@
 <script>
 import TimePicker from '@/components/TimePicker';
 import { v4 as uuidv4 } from 'uuid';
+import moment from "moment";
 
 export default {
   name: 'TodoCard',
@@ -63,7 +65,7 @@ export default {
   ],
   data() {
     return {
-      released: true,
+      released: this.set.released,
       checkmenuVisible: true,
       title: 'Leisure Activity',
       input: '',
@@ -89,7 +91,7 @@ export default {
     }
   },
   methods: {
-    deletSet(){
+    deletSet() {
       const data = {
         param: 'id=' + this.set.id,
         actual: this.set.id
@@ -123,6 +125,32 @@ export default {
         }
       }
       this.$store.dispatch('task/deleteCurTodo', data)
+    },
+    updateCompleted(todo) {
+      todo.completed = !todo.completed
+      console.log(todo.completed)
+      console.log(todo.completed ? 1 : 0)
+      const url = 'id=' + todo.id + '&name=' + todo.title + '&deadline=' + todo.ddl + '&finishtime=' + todo.finishtime + '&state=' + (todo.completed ? 1 : 0) + '&setid=' + todo.owner
+      const data = {
+        param: url,
+        actual: todo
+      }
+      // console.log(data)
+      this.$store.dispatch('task/updateCurTodo', data)
+    },
+    updateReleased() {
+      let data = {
+        param: '',
+        actual: this.set
+      }
+      data.actual.released = this.released
+      const url = 'id=' + data.actual.id + '&name=' + data.actual.name +
+        '&createtime=' + moment(new Date()).format('YYYY-MM-DD HH:mm:ss') +
+        '&tag=' + data.actual.genres.join(';') + '&ddl=' + data.actual.deadline + '&creatermail=' +
+        '1@qq.com' + '&state=' + (data.actual.released ? 1 : 0)
+      data.param = url
+      // console.log(data)
+      this.$store.dispatch('task/updateCurSet', data)
     }
   }
 }

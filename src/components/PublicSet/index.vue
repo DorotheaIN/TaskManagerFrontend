@@ -8,10 +8,10 @@
       </div>
     </div>
     <div class="task-tools">
-      <div class="task-count">{{todolist.length}} tasks</div>
+      <div class="task-count">{{set.todos.length}} tasks</div>
     </div>
     <el-divider></el-divider>
-    <div v-for="task in todolist" class="task-list">
+    <div v-for="task in set.todos" class="task-list">
       <div class="task-item">
         <i class="el-icon-caret-right" ></i>
         <label class="task-name">

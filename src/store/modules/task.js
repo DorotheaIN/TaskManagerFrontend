@@ -1,4 +1,4 @@
-import { addTodo, getSetsByCreater, deleteSet, deleteTodo, addSet } from '@/api/task'
+import { addTodo, getSetsByCreater, deleteSet, deleteTodo, addSet, updateTodo, updateSet } from '@/api/task'
 import qs from 'qs'
 
 const getDefaultState = () => {
@@ -51,6 +51,28 @@ const mutations = {
   },
   DELETE_SET: (state, actual) => {
     state.taskSetList = state.taskSetList.filter(set => set.id !== actual)
+  },
+  UPDATE_TODO: (state, todo) => {
+    state.taskSetList.forEach((set) => {
+      if (set.id === todo.owner) {
+        set.todos = set.todos.map(item => {
+          if (item.id === todo.id) {
+            return todo
+          } else {
+            return item
+          }
+        })
+      }
+    })
+  },
+  UPDATE_SET: (state, actual) => {
+    state.taskSetList = state.taskSetList.map(item => {
+      if (item.id === actual.id) {
+        return actual
+      } else {
+        return item
+      }
+    })
   }
 }
 
@@ -131,6 +153,28 @@ const actions = {
     return new Promise((resolve, reject) => {
       deleteSet(data.param, '').then((response) => {
         commit('DELETE_SET', data.actual)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  updateCurTodo({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      updateTodo(data.param, '').then((response) => {
+        console.log('updateTodo', response)
+        commit('UPDATE_TODO', data.actual)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  updateCurSet({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      updateSet(data.param, '').then((response) => {
+        console.log('updateSet', response)
+        commit('UPDATE_SET', data.actual)
         resolve()
       }).catch(error => {
         reject(error)
