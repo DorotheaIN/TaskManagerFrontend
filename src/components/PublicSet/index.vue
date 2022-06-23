@@ -26,7 +26,7 @@
 import { getCollectState, collectSet, uncollectSet } from "@/api/task";
 import {v4 as uuidv4} from "uuid";
 import moment from "moment";
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'PublicSet',
   props: [
@@ -57,6 +57,11 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    ...mapGetters([
+      'mail'
+    ])
   },
   methods:{
     addNewTask(key){
@@ -104,7 +109,7 @@ export default {
       const url = 'id=' + set.id + '&name=' + set.name +
         '&createtime=' + moment(new Date()).format('YYYY-MM-DD HH:mm:ss') +
         '&tag=' + set.genres.join(';') + '&ddl=' + set.deadline + '&creatermail=' +
-        '1@qq.com' + '&state=' + (set.released ? 1 : 0)
+        this.mail + '&state=' + (set.released ? 1 : 0)
 
       const data = {
         param: url,
@@ -115,7 +120,7 @@ export default {
     },
     fetchData(){
       getCollectState({
-        'mail': '1@qq.com',
+        'mail': this.mail,
         'setid': this.set.id
       }).then((response) => {
         // console.log("collect", this.set.id)
@@ -125,12 +130,12 @@ export default {
     },
     changeCollect(){
       if (this.isCollected){
-        uncollectSet('mail=' + '1@qq.com' + '&setid=' + this.set.id + '&time=2001-01-01 00:00:01', '').then((response) => {
+        uncollectSet('mail=' + this.mail + '&setid=' + this.set.id + '&time=2001-01-01 00:00:01', '').then((response) => {
           console.log('uncollect', response)
           this.isCollected = !this.isCollected
         })
       } else {
-        collectSet('mail=' + '1@qq.com' + '&setid=' + this.set.id + '&time=2001-01-01 00:00:01', '').then((response) => {
+        collectSet('mail=' + this.mail + '&setid=' + this.set.id + '&time=2001-01-01 00:00:01', '').then((response) => {
           console.log('collect', response)
           this.isCollected = !this.isCollected
         })

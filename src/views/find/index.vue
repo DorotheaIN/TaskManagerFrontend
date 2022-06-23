@@ -50,7 +50,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'name'
+      'name',
+      'mail'
     ]),
     sliceList() {
       return function (data,count) {

@@ -1,20 +1,20 @@
 import request from '@/utils/request'
 
-export function login(data) {
-  return request({
-    url: '/vue-admin-template/user/login',
-    method: 'post',
-    data
-  })
-}
-
-// export function login(params, data) {
+// export function login(data) {
 //   return request({
-//     url: '/taskManager/Login' + '?' + params,
+//     url: '/vue-admin-template/user/login',
 //     method: 'post',
 //     data
 //   })
 // }
+
+export function login(params) {
+  return request({
+    url: '/taskManager/Login',
+    method: 'get',
+    params
+  })
+}
 
 export function getInfo(token) {
   return request({

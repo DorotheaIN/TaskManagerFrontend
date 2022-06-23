@@ -75,7 +75,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import TodoCard from '@/components/TodoCard'
-import { getSetsByCreater } from '@/api/task'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 export default {
@@ -123,7 +122,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'name'
+      'mail'
     ]),
     sliceList() {
       return function(data, count) {
@@ -159,7 +158,7 @@ export default {
       const url = 'id=' + set.id + '&name=' + set.name +
         '&createtime=' + moment(new Date()).format('YYYY-MM-DD HH:mm:ss') +
         '&tag=' + set.genres.join(';') + '&ddl=' + set.deadline + '&creatermail=' +
-        '1@qq.com' + '&state=' + (set.released ? 1 : 0)
+        this.mail + '&state=' + (set.released ? 1 : 0)
 
       const data = {
         param: url,
@@ -172,7 +171,7 @@ export default {
       this.taskSet.genres.splice(this.taskSet.genres.indexOf(tag), 1)
     },
     fetchData() {
-      this.$store.dispatch('task/getSetListByUser', '1@qq.com')
+      this.$store.dispatch('task/getSetListByUser', this.mail)
     },
     showInput() {
       this.inputVisible = true

@@ -6,32 +6,32 @@
         <h3 class="title">Login Form</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="mail">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
+          ref="mail"
+          v-model="loginForm.mail"
+          placeholder="Mail"
+          name="mail"
           type="text"
           tabindex="1"
           auto-complete="on"
         />
       </el-form-item>
 
-      <el-form-item prop="password">
+      <el-form-item prop="pass">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
         <el-input
           :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
+          ref="pass"
+          v-model="loginForm.pass"
           :type="passwordType"
           placeholder="Password"
-          name="password"
+          name="pass"
           tabindex="2"
           auto-complete="on"
           @keyup.enter.native="handleLogin"
@@ -74,12 +74,12 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        mail: '1@qq.com',
+        pass: '1234567'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        mail: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        pass: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
       passwordType: 'password',
@@ -102,7 +102,7 @@ export default {
         this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
+        this.$refs.pass.focus()
       })
     },
     handleLogin() {

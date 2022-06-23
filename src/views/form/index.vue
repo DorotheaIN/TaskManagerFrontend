@@ -8,6 +8,7 @@
 import { CalendarHeatmap } from 'vue-calendar-heatmap'
 import { getActiveMap } from "@/api/task";
 import moment from "moment";
+import { mapGetters } from 'vuex'
 
 export default {
   components:{
@@ -29,6 +30,11 @@ export default {
       end: moment(new Date()).format('YYYY-MM-DD')
     }
   },
+  computed: {
+    ...mapGetters([
+      'mail'
+    ])
+  },
   methods: {
     onSubmit() {
       this.$message('submit!')
@@ -39,8 +45,10 @@ export default {
         type: 'warning'
       })
     },
-    fetchData(){
-      getActiveMap().then((response) => {
+    fetchData() {
+      getActiveMap({
+        mail: this.mail
+      }).then((response) => {
         console.log(response)
         response.forEach((item) => {
           this.activeData.push({

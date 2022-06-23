@@ -73,11 +73,11 @@ export function login(params, data) {
   })
 }
 
-export function getActiveMap(data) {
+export function getActiveMap(params) {
   return request({
     url: '/taskManager/GetActiveMap',
     method: 'get',
-    data
+    params
   })
 }
 

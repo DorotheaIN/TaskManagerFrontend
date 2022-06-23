@@ -48,7 +48,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'name'
+      'name',
+      'mail'
     ]),
     sliceList() {
       return function (data,count) {
@@ -70,7 +71,7 @@ export default {
   methods: {
     fetchData() {
       getCollectSet({
-        'mail': '1@qq.com'
+        'mail': this.mail
       }).then((response) => {
         const list = []
         console.log('get', response)

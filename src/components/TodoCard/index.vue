@@ -54,6 +54,7 @@
 import TimePicker from '@/components/TimePicker';
 import { v4 as uuidv4 } from 'uuid';
 import moment from "moment";
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'TodoCard',
@@ -63,6 +64,11 @@ export default {
   props: [
     'set'
   ],
+  computed: {
+    ...mapGetters([
+      'mail'
+    ])
+  },
   data() {
     return {
       released: this.set.released,
@@ -147,7 +153,7 @@ export default {
       const url = 'id=' + data.actual.id + '&name=' + data.actual.name +
         '&createtime=' + moment(new Date()).format('YYYY-MM-DD HH:mm:ss') +
         '&tag=' + data.actual.genres.join(';') + '&ddl=' + data.actual.deadline + '&creatermail=' +
-        '1@qq.com' + '&state=' + (data.actual.released ? 1 : 0)
+        this.mail + '&state=' + (data.actual.released ? 1 : 0)
       data.param = url
       // console.log(data)
       this.$store.dispatch('task/updateCurSet', data)
