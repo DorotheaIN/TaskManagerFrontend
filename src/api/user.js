@@ -16,6 +16,14 @@ export function login(params) {
   })
 }
 
+export function getUserByMail(params) {
+  return request({
+    url: '/taskManager/GetUserByMail',
+    method: 'get',
+    params
+  })
+}
+
 export function getInfo(token) {
   return request({
     url: '/vue-admin-template/user/info',

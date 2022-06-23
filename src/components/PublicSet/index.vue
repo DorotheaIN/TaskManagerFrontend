@@ -1,7 +1,13 @@
 <template>
   <div class="app">
     <div class="task-header">
-      <h1 class="task-header-title">{{set.name}}</h1>
+      <div>
+        <h1 class="task-header-title" style="display: inline-block">{{set.name}}</h1>
+      </div>
+      <div style="padding-right: 300px;padding-top: 15px;position:relative;display: inline-block">
+        <img style="bottom: 0px" :src="user.avator" class="user-avatar">
+        <span style="position: absolute; bottom: 7px;margin-left: 5px; font-size: 16px">{{user.name}}</span>
+      </div>
       <div class="task-header-icon">
         <i style="padding-right: 20px" class="el-icon-document-copy" @click="copySet"></i>
         <i :class="isCollected ? 'el-icon-star-on' : 'el-icon-star-off'" style="cursor: pointer" @click="changeCollect"></i>
@@ -9,7 +15,11 @@
     </div>
     <div class="task-tools">
       <div class="task-count">{{set.todos.length}} tasks</div>
+      <div style="padding-left: 20px">
+        <span class="tag approved" v-for="i in set.genres" style="margin-right: 10px">{{i}}</span>
+      </div>
     </div>
+
     <el-divider></el-divider>
     <div v-for="task in set.todos" class="task-list">
       <div class="task-item">
@@ -24,6 +34,7 @@
 
 <script>
 import { getCollectState, collectSet, uncollectSet } from "@/api/task";
+import { getUserByMail } from '@/api/user'
 import {v4 as uuidv4} from "uuid";
 import moment from "moment";
 import { mapGetters } from 'vuex'
@@ -55,7 +66,8 @@ export default {
           ddl: '2022-05-11 19:30',
           owner: 'Leisure Activity'
         }
-      ]
+      ],
+      user:[]
     }
   },
   computed: {
@@ -127,6 +139,11 @@ export default {
         // console.log("collect", response)
         this.isCollected = response
       })
+      getUserByMail({
+        'mail': this.mail
+      }).then((response) => {
+        this.user = response
+      })
     },
     changeCollect(){
       if (this.isCollected){
@@ -183,6 +200,21 @@ body {
   overflow: hidden;
   color: #455963;
   box-shadow: 0 20px 80px rgba(0,0,0,.3);
+}
+.user-avatar {
+  /*cursor: pointer;*/
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+}
+.tag.approved{
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background-color: #e0fbf6;
+  color: #58c2a9;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .task-list {
@@ -274,7 +306,7 @@ body {
 
 .task-tools {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   flex-wrap: wrap;
   align-items: flex-start;
   padding: 0 20px;

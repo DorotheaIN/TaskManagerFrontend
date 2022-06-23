@@ -16,6 +16,9 @@
     </div>
     <div class="task-tools">
       <div class="task-count">{{set.todos.length}} tasks</div>
+      <div>
+        <span class="tag approved" v-for="i in set.genres" style="margin-right: 10px">{{i}}</span>
+      </div>
       <div class="task-filter">
         <button class="task-filter is-active">All</button>
         <button class="task-filter" data-param="completed" data-value="false">Active</button>
@@ -170,8 +173,29 @@ export default {
   outline: 0;
 }
 
+
 :root {
   --font: 'DM Sans', sans-serif;
+  --bg-color: #f5f8ff;;
+  --main-color: #353536;
+  --secondary-color: #8e92a4;
+  --main-text-color: #5d606b;
+  --secondary-dark-color: #9496a5;
+  --tag-color-one: #e0fbf6;
+  --tag-color-text-one: #58c2a9;
+  --tag-color-two: #ece7fe;
+  --tag-color-text-two: #8972f3;
+  --tag-color-three: #fde7ea;
+  --tag-color-text-three: #e77f89;
+  --tag-color-four: #f7f8fc;
+  --tag-color-text-four: #a0a6b5;
+  --checkbox-color: #009e90;
+  --button-color: #49beb7;
+  --box-color: #fff1d6;
+  --box-color-2: #d3e6ff;
+  --box-color-3: #ffd9d9;
+  --box-color-4: #daffe5;
+  --task-color: #777982;
 }
 
 body {
@@ -393,4 +417,43 @@ body {
   flex: 2;
   white-space: nowrap;
 }
+
+
+.tag.approved{
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background-color: #e0fbf6;
+  color: #58c2a9;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.tag {
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 20px;
+
+  &.approved {
+     background-color: #e0fbf6;
+     color: #58c2a9;
+   }
+
+  &.progress {
+     background-color: #ece7fe;
+     color: #8972f3;
+   }
+
+  &.review {
+     background-color: #fde7ea;
+     color: #e77f89;
+   }
+
+  &.waiting {
+     background-color: #f7f8fc;
+     color: #a0a6b5;
+   }
+}
+
+
 </style>
