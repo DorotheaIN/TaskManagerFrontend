@@ -3,8 +3,8 @@
     <div class="task-header">
       <h1 class="task-header-title">{{set.name}}</h1>
       <div class="task-header-icon">
-        <i style="padding-right: 20px" class="el-icon-document-copy" ></i>
-        <i class="el-icon-star-off" ></i>
+        <i style="padding-right: 20px" class="el-icon-document-copy" @click="copySet"></i>
+        <i :class="isCollected ? 'el-icon-star-on' : 'el-icon-star-off'" style="cursor: pointer" @click="changeCollect"></i>
       </div>
     </div>
     <div class="task-tools">
@@ -23,6 +23,10 @@
 </template>
 
 <script>
+import { getCollectState, collectSet, uncollectSet } from "@/api/task";
+import {v4 as uuidv4} from "uuid";
+import moment from "moment";
+
 export default {
   name: 'PublicSet',
   props: [
@@ -34,6 +38,7 @@ export default {
       checkmenuVisible: true,
       title: 'Leisure Activity',
       input: '',
+      isCollected: false,
       deadline: '',
       todolist:[
         {
@@ -65,7 +70,75 @@ export default {
       console.log(task)
       this.key = ''
       this.deadline = ''
+    },
+    copySet() {
+      const setid = uuidv4()
+      const copyTodos = []
+      this.set.todos.forEach((todo) => {
+        const task = {
+          id: uuidv4(),
+          title: todo.title,
+          ddl: '2001-01-01 00:00:00',
+          finishtime: '2001-01-01 00:00:00',
+          completed: false,
+          owner: setid
+        }
+        this.deadline = ''
+        const final = 'id=' + task.id + '&name=' + todo.title + '&deadline=' + task.ddl + '&finishtime=' + '2001-01-01 00:00:00' + '&state=' + '0' + '&setid=' + setid
+        const dataTask = {
+          todo: task,
+          param: final
+        }
+        this.$store.dispatch('task/addNewTodo', dataTask)
+        copyTodos.push(task)
+      })
+
+      const set = {
+        id: setid,
+        name: this.set.name,
+        released: false,
+        deadline: '2001-01-01 00:00:00',
+        genres: this.set.genres,
+        todos: copyTodos
+      }
+      const url = 'id=' + set.id + '&name=' + set.name +
+        '&createtime=' + moment(new Date()).format('YYYY-MM-DD HH:mm:ss') +
+        '&tag=' + set.genres.join(';') + '&ddl=' + set.deadline + '&creatermail=' +
+        '1@qq.com' + '&state=' + (set.released ? 1 : 0)
+
+      const data = {
+        param: url,
+        actual: set
+      }
+      console.log(data)
+      this.$store.dispatch('task/addNewSet', data)
+    },
+    fetchData(){
+      getCollectState({
+        'mail': '1@qq.com',
+        'setid': this.set.id
+      }).then((response) => {
+        // console.log("collect", this.set.id)
+        // console.log("collect", response)
+        this.isCollected = response
+      })
+    },
+    changeCollect(){
+      if (this.isCollected){
+        uncollectSet('mail=' + '1@qq.com' + '&setid=' + this.set.id + '&time=2001-01-01 00:00:01', '').then((response) => {
+          console.log('uncollect', response)
+          this.isCollected = !this.isCollected
+        })
+      } else {
+        collectSet('mail=' + '1@qq.com' + '&setid=' + this.set.id + '&time=2001-01-01 00:00:01', '').then((response) => {
+          console.log('collect', response)
+          this.isCollected = !this.isCollected
+        })
+      }
     }
+  },
+  created() {
+    this.fetchData()
   }
 }
 </script>

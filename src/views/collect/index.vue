@@ -22,14 +22,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import TodoCard from '@/components/TodoCard'
 import PublicSet from '@/components/PublicSet'
-import { getAllPublicSets } from '@/api/task'
+import { getCollectSet } from '@/api/task'
 
 export default {
-  name: 'Find',
+  name: 'Collect',
   components:{
-    TodoCard,
     PublicSet
   },
   data() {
@@ -71,7 +69,9 @@ export default {
   },
   methods: {
     fetchData() {
-      getAllPublicSets().then((response) => {
+      getCollectSet({
+        'mail': '1@qq.com'
+      }).then((response) => {
         const list = []
         console.log('get', response)
         response.forEach((item) => {

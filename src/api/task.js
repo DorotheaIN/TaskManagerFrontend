@@ -72,3 +72,43 @@ export function login(params, data) {
     data
   })
 }
+
+export function getActiveMap(data) {
+  return request({
+    url: '/taskManager/GetActiveMap',
+    method: 'get',
+    data
+  })
+}
+
+export function getCollectState(params) {
+  return request({
+    url: '/taskManager/GetCollectState',
+    method: 'get',
+    params
+  })
+}
+
+export function getCollectSet(params) {
+  return request({
+    url: '/taskManager/GetCollectSet',
+    method: 'get',
+    params
+  })
+}
+
+export function collectSet(params, data) {
+  return request({
+    url: '/taskManager/CollectSet' + '?' + params,
+    method: 'post',
+    data
+  })
+}
+
+export function uncollectSet(params, data) {
+  return request({
+    url: '/taskManager/UncollectSet' + '?' + params,
+    method: 'post',
+    data
+  })
+}

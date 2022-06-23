@@ -130,7 +130,7 @@ export default {
       todo.completed = !todo.completed
       console.log(todo.completed)
       console.log(todo.completed ? 1 : 0)
-      const url = 'id=' + todo.id + '&name=' + todo.title + '&deadline=' + todo.ddl + '&finishtime=' + todo.finishtime + '&state=' + (todo.completed ? 1 : 0) + '&setid=' + todo.owner
+      const url = 'id=' + todo.id + '&name=' + todo.title + '&deadline=' + todo.ddl + '&finishtime=' + moment(new Date()).format('YYYY-MM-DD HH:mm:ss') + '&state=' + (todo.completed ? 1 : 0) + '&setid=' + todo.owner
       const data = {
         param: url,
         actual: todo
