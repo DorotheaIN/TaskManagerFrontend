@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <calendar-heatmap :values="activeData" :end-date="end" :range-color="['#ebedf0', '#dae2ef', '#c0ddf9', '#73b3f3', '#3886e1', '#17459e']"/>
+    <echarts :x='x' :y="y" ids='b' type="bar"></echarts>
   </div>
 </template>
 
@@ -9,10 +10,11 @@ import { CalendarHeatmap } from 'vue-calendar-heatmap'
 import { getActiveMap } from "@/api/task";
 import moment from "moment";
 import { mapGetters } from 'vuex'
-
+import Echarts from '@/components/Echarts'
 export default {
   components:{
-    CalendarHeatmap
+    CalendarHeatmap,
+    Echarts
   },
   data() {
     return {
@@ -26,6 +28,8 @@ export default {
         resource: '',
         desc: '',
       },
+      x:["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      y:[150, 230, 224, 218, 135, 147, 260],
       activeData: [],
       end: moment(new Date()).format('YYYY-MM-DD')
     }

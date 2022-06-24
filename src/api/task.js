@@ -8,15 +8,6 @@ export function getAllPublicSets(params) {
   })
 }
 
-export function addTodo(params, data) {
-  return request(({
-    url: '/taskManager/AddTodo' + '?' + params,
-    method: 'post',
-    data
-  }))
-  // return request.post('/taskManager/AddTodo', data)
-}
-
 export function getSetsByCreater(params) {
   return request(({
     url: '/taskManager/GetSetByCreater',
@@ -24,6 +15,32 @@ export function getSetsByCreater(params) {
     params
   }))
 }
+
+export function getActiveMap(params) {
+  return request({
+    url: '/taskManager/GetActiveMap',
+    method: 'get',
+    params
+  })
+}
+
+export function getCollectState(params) {
+  return request({
+    url: '/taskManager/GetCollectState',
+    method: 'get',
+    params
+  })
+}
+
+export function addTodo(params, data) {
+  return request(({
+    url: '/taskManager/AddTodo' + '?' + params,
+    method: 'post',
+    data
+  }))
+}
+
+
 
 export function deleteTodo(params, data) {
   return request(({
@@ -73,21 +90,7 @@ export function login(params, data) {
   })
 }
 
-export function getActiveMap(params) {
-  return request({
-    url: '/taskManager/GetActiveMap',
-    method: 'get',
-    params
-  })
-}
 
-export function getCollectState(params) {
-  return request({
-    url: '/taskManager/GetCollectState',
-    method: 'get',
-    params
-  })
-}
 
 export function getCollectSet(params) {
   return request({

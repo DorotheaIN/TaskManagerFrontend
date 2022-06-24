@@ -35,6 +35,8 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+import * as echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 
 new Vue({
   el: '#app',

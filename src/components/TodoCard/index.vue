@@ -45,7 +45,7 @@
         <label class="task-name">
           {{task.title}}
 <!--          <el-divider direction="vertical"></el-divider>-->
-          <div class="task-time">{{task.ddl}}</div>
+          <div class="task-time">{{task.ddl | modify('2001-01-01 00:00:00')}}</div>
         </label>
         <button class="task-delete" data-id="-3" @click="deleteTask(task)"></button>
       </div>
@@ -160,6 +160,17 @@ export default {
       data.param = url
       // console.log(data)
       this.$store.dispatch('task/updateCurSet', data)
+    }
+  },
+  filters:{
+    modify(value, dflt){
+      if(value === dflt){
+        console.log('x')
+        return ''
+      }else {
+        console.log('y',value)
+        return value
+      }
     }
   }
 }

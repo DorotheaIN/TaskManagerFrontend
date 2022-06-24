@@ -39,7 +39,7 @@ module.exports = {
     // after: require('./mock/mock-server.js'),
     proxy: {
       '/taskManager': {
-        target: 'http://localhost:46024',
+        target: 'http://localhost:46001',
         ws: true,
         changeOrigin: true,
         pathRewrite: {
