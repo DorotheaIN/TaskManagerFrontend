@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import {getToken, setToken, removeToken, getMail, setMail, removeMail} from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
@@ -7,7 +7,7 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    mail: ''
+    mail: getMail()
   }
 }
 
@@ -43,6 +43,7 @@ const actions = {
         commit('SET_MAIL', data.mail)
         // const { data } = response
         // commit('SET_TOKEN', data.token)
+        setMail(data.mail)
         setToken(response.token)
         resolve()
       }).catch(error => {
@@ -54,15 +55,17 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
+      getInfo({
+        'mail': state.mail
+      }).then(response => {
+        const data = response
 
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
-        const { name, avatar } = data
+        const { name, avator } = data
         commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
+        commit('SET_AVATAR', avator)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -75,6 +78,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         removeToken() // must remove  token  first
+        removeMail()
         resetRouter()
         commit('RESET_STATE')
         resolve()

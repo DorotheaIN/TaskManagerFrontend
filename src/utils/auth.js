@@ -1,6 +1,19 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'vue_admin_template_token'
+const TokenKey = 'token'
+const Mail = 'mail'
+
+export function getMail() {
+  return Cookies.get(Mail)
+}
+
+export function setMail(mail) {
+  return Cookies.set(Mail, mail)
+}
+
+export function removeMail() {
+  return Cookies.remove(Mail)
+}
 
 export function getToken() {
   return Cookies.get(TokenKey)

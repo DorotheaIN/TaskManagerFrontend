@@ -24,11 +24,11 @@ export function getUserByMail(params) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo(params) {
   return request({
-    url: '/vue-admin-template/user/info',
+    url: '/taskManager/GetUserByMail',
     method: 'get',
-    params: { token }
+    params
   })
 }
 
