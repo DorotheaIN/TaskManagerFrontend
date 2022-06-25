@@ -139,8 +139,9 @@ export default {
         // console.log("collect", response)
         this.isCollected = response
       })
+      console.log(this.set.creatermail)
       getUserByMail({
-        'mail': this.mail
+        'mail': this.set.creatermail
       }).then((response) => {
         this.user = response
       })

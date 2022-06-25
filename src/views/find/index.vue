@@ -97,12 +97,13 @@ export default {
             genres: item.tag.split(';').filter((t) => {
               return t !== ''
             }),
-            todos: todoArr
+            todos: todoArr,
+            creatermail: item.creatermail
           })
         })
         console.log(list)
         this.taskSetList = list
-        console.log(this.taskSetList)
+        console.log('tasklist',this.taskSetList)
       })
     },
 

@@ -42,7 +42,7 @@
     <div v-for="task in set.todos" class="task-list">
       <div :class="task.completed ? 'task-item is-completed' : 'task-item' ">
         <input class="task-status" type="checkbox" v-model="task.completed" data-id="-3" @click="updateCompleted(task)">
-        <label class="task-name">
+        <label class="task-name" >
           {{task.title}}
 <!--          <el-divider direction="vertical"></el-divider>-->
           <div class="task-time">{{task.ddl | modify('2001-01-01 00:00:00')}}</div>

@@ -1,53 +1,79 @@
 <template>
-  <div class="container">
-    <div
-      :id="ids"
-      :style="{ width: '500px', height: '600px', border: '1px solid #000' }"
-    ></div>
-  </div>
+  <div class="echart" id="mychart" :style="myChartStyle"></div>
 </template>
 
 <script>
+import * as echarts from "echarts";
+
 export default {
-  name: 'Echarts',
-  props: ["x", "y", "ids", "type"],
+  props: ['pieData', 'title'],
+  data() {
+    return {
+      myChart: {},
+      pieName: [],
+      myChartStyle: { float: "left", width: "100%", height: "400px" } //图表样式
+    };
+  },
   mounted() {
-    this.drawLine();
+    this.initDate(); //数据初始化
+    this.initEcharts();
   },
   methods: {
-    drawLine() {
-      // 基于准备好的dom，初始化echarts实例
-      let myChart = this.$echarts.init(document.getElementById(this.ids));
-      // 绘制图表
-      myChart.setOption({
+    initDate() {
+      for (let i = 0; i < this.pieData.length; i++) {
+        // this.xData[i] = i;
+        // this.yData =this.xData[i]*this.xData[i];
+        this.pieName[i] = this.pieData[i].name;
+      }
+    },
+    initEcharts() {
+      // 饼图
+      const option = {
+        legend: {
+          // 图例
+          data: this.pieName,
+          right: "10%",
+          top: "30%",
+          orient: "vertical"
+        },
         title: {
-          text: "ECharts 入门示例",   // y轴的名字
-        },
-        tooltip: {
-          show: true, //当光标移上柱形图时是否有文本提示
-        },
-        xAxis: {
-          type: "category",
-          data: this.x,
-        },
-        yAxis: {
-          type: "value",
+          // 设置饼图标题，位置设为顶部居中
+          text: this.title,
+          top: "0%",
+          left: "center"
         },
         series: [
           {
-            data: this.y,
-            type: this.type,
-          },
-        ],
+            type: "pie",
+            label: {
+              show: true,
+              formatter: "{b} : {c} ({d}%)" // b代表名称，c代表对应值，d代表百分比
+            },
+            radius: "30%", //饼图半径
+            data: this.pieData
+          }
+        ]
+      };
+      console.log(this.seriesData);
+      const optionFree = {
+        xAxis: {},
+        yAxis: {},
+        series: [
+          {
+            data: this.seriesData,
+            type: "line",
+            smooth: true
+          }
+        ]
+      };
+      this.myChart = echarts.init(document.getElementById("mychart"));
+      this.myChart.setOption(option);
+      //随着屏幕大小调节图表
+      window.addEventListener("resize", () => {
+        this.myChart.resize();
       });
-    },
-  },
+    }
+  }
 };
 </script>
-<style scoped>
-#a,
-#b {
-  float: left;
-  margin: 20px 50px;
-}
-</style>
+

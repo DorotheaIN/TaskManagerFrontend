@@ -97,7 +97,8 @@ export default {
             genres: item.tag.split(';').filter((t) => {
               return t !== ''
             }),
-            todos: todoArr
+            todos: todoArr,
+            creatermail: item.creatermail
           })
         })
         console.log(list)
